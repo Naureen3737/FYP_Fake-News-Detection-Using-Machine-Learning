@@ -1,0 +1,83 @@
+<!-- prediction.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fake News Detection</title>
+
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+      body { font-family: 'Roboto', sans-serif; }
+      h1, h2, .title-font { font-family: 'Montserrat', sans-serif; }
+    </style>
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <header class="bg-gradient-to-r from-blue-600 to-teal-500 shadow-lg sticky top-0 z-50">
+      <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+        <a class="flex title-font font-medium items-center text-white mb-4 md:mb-0" href="/">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-white p-2 bg-green-500 rounded-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+          <span class="ml-3 text-xl font-semibold">Fake News Detection</span>
+        </a>
+        <nav class="md:ml-auto flex space-x-4">
+          <a href="/" class="text-white font-semibold text-sm py-2 px-5 rounded-full bg-gradient-to-r from-emerald-500 to-green-600 hover:scale-105 transition">Home</a>
+          <a href="/prediction" class="text-white font-semibold text-sm py-2 px-5 rounded-full bg-gradient-to-r from-emerald-500 to-green-600 hover:scale-105 transition">Prediction</a>
+          <a href="/live-news" class="text-white font-semibold text-sm py-2 px-5 rounded-full bg-gradient-to-r from-emerald-500 to-green-600 hover:scale-105 transition">Real-Time News</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="text-gray-700 body-font bg-gradient-to-r from-blue-100 via-teal-50 to-gray-100 py-20">
+      <div class="container px-5 mx-auto">
+        <div class="text-center mb-10">
+          <h2 class="text-sm text-black-600 tracking-widest font-medium uppercase mb-2">Machine Learning Project</h2>
+          <h1 class="text-4xl font-bold text-gray-900 mb-4">Fake News Detection</h1>
+          <p class="max-w-xl mx-auto text-base leading-relaxed">Enter a news headline below to find out if it's real or fake using our trained AI model.</p>
+        </div>
+
+        {% if prediction_text is not none %}
+        <div class="text-center mb-8">
+          <p class="text-2xl font-semibold text-blue-700">Prediction: {{ prediction_text }}</p>
+        </div>
+        {% endif %}
+
+        {% if prediction_text and headline %}
+        <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8 mt-8">
+          <form action="/submit_feedback" method="POST">
+            <input type="hidden" name="headline" value="{{ headline }}" />
+            <input type="hidden" name="prediction" value="{{ prediction_text }}" />
+
+            <h3 class="text-lg font-medium text-gray-800 mb-4">Was the prediction correct?</h3>
+            <div class="flex space-x-4">
+              <button type="submit" name="feedback" value="Correct" class="w-full bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition">Correct</button>
+              <button type="submit" name="feedback" value="Incorrect" class="w-full bg-red-500 text-white py-3 rounded-lg font-semibold hover:bg-red-600 transition">Incorrect</button>
+            </div>
+          </form>
+        </div>
+        {% endif %}
+
+        <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8 mt-12">
+          <form action="/prediction" method="POST">
+            <label for="news" class="block text-gray-700 font-medium mb-2">Enter News Headline</label>
+            <input type="text" id="news" name="news" required value="{{ headline if headline else '' }}"
+              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 mb-6" />
+
+            <button type="submit"
+              class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-black py-3 rounded-lg font-semibold hover:shadow-xl transform hover:scale-105 transition duration-300">
+              🔍 Analyze Headline
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer class="bg-blue-800 text-white py-6">
+      <div class="container px-5 mx-auto text-center">
+        <p class="text-sm">© 2025 Fake News Detection — All Rights Reserved</p>
+      </div>
+    </footer>
+  </body>
+</html>
